@@ -1,7 +1,7 @@
 package com.cookpad.dto;
 
 
-import com.cookpad.entities.Category;
+import com.cookpad.entities.enums.RecipeType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecipeDto {
     private String recipeName;
-    private Category category;
+    private RecipeType recipeType;
     private Integer prepTime;
     private Integer cookingTime;
     private Integer serves;

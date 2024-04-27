@@ -1,5 +1,6 @@
 package com.cookpad.entities;
 
+import com.cookpad.entities.enums.Gender;
 import com.cookpad.security.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

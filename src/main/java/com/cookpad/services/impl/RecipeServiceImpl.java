@@ -3,8 +3,10 @@ package com.cookpad.services.impl;
 import com.cookpad.dto.RecipeDto;
 import com.cookpad.entities.Recipe;
 import com.cookpad.exceptions.ResourceNotFoundException;
+import com.cookpad.mapper.RecipeMapper;
 import com.cookpad.repositories.RecipeRepository;
 import com.cookpad.responses.RecipeResponse;
+import com.cookpad.responses.RecipeWithNutritionResponse;
 import com.cookpad.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,11 +25,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
+    private final RecipeMapper recipeMapper;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipeRepository, ModelMapper modelMapper) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeMapper recipeMapper, ModelMapper modelMapper) {
         this.recipeRepository = recipeRepository;
+        this.recipeMapper = recipeMapper;
         this.modelMapper = modelMapper;
     }
 
@@ -56,6 +60,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public List<RecipeWithNutritionResponse> getRecipesWithNutrition() {
+        return recipeMapper.getRecipesWithNutrition();
+    }
+
+    @Override
     public RecipeDto getRecipeById(Long recipeId) {
         log.info("recipeId: "  + recipeId);
 
@@ -69,6 +78,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeDto createRecipe(RecipeDto recipeDto) {
         Recipe recipe = mapToEntity(recipeDto);
         log.info("recipe: " + recipe);
+
         recipe.setCreatedAt(LocalDateTime.now());;
         Recipe savedRecipe = recipeRepository.save(recipe);
 
@@ -104,9 +114,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipeDto.getCookingMethod() != null) {
             existingRecipe.setCookingMethod(recipeDto.getCookingMethod());
         }
-        if (recipeDto.getCategory() != null) {
-            existingRecipe.setCategory(recipeDto.getCategory());
-        }
+
 
         return mapToDTO(recipeRepository.save(existingRecipe));
     }

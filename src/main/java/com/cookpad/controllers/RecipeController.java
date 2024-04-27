@@ -3,11 +3,15 @@ package com.cookpad.controllers;
 
 import com.cookpad.dto.RecipeDto;
 import com.cookpad.responses.RecipeResponse;
+import com.cookpad.responses.RecipeWithNutritionResponse;
 import com.cookpad.services.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/recipes")
 public class RecipeController {
@@ -29,6 +33,13 @@ public class RecipeController {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
+    @GetMapping("/recipes-with-nutrition")
+    public List<RecipeWithNutritionResponse> getRecipesWithNutrition() {
+        return recipeService.getRecipesWithNutrition();
+    }
+
+
+    @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
     @GetMapping("/{recipeId}")
     public ResponseEntity<RecipeDto> getRecipeById(@PathVariable Long recipeId) {
         return ResponseEntity.ok(recipeService.getRecipeById(recipeId));
@@ -39,7 +50,6 @@ public class RecipeController {
     public RecipeDto createRecipe(@RequestBody RecipeDto recipeDto) {
         return recipeService.createRecipe(recipeDto);
     }
-
 
     @PreAuthorize("hasAuthority('SCOPE_recipe:update')")
     @PutMapping("/update-recipe/{recipeId}")

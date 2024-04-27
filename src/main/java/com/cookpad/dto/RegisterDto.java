@@ -1,6 +1,6 @@
 package com.cookpad.dto;
 
-import com.cookpad.entities.Gender;
+import com.cookpad.entities.enums.Gender;
 import com.cookpad.security.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;

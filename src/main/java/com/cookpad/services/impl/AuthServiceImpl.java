@@ -4,6 +4,7 @@ import com.cookpad.dto.RegisterDto;
 import com.cookpad.dto.UserDto;
 import com.cookpad.entities.User;
 import com.cookpad.exceptions.RecipeAPIException;
+import com.cookpad.mapper.UserMapper;
 import com.cookpad.repositories.UserRepository;
 import com.cookpad.security.AppConfig;
 import com.cookpad.security.UserRole;
@@ -31,8 +32,10 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
     private final UserRepository userRepository;
+//    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AppConfig appConfig;
+
 
     @Autowired
     public AuthServiceImpl(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, AppConfig appConfig) {
@@ -45,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDto register (RegisterDto registerDto) {
         log.info("registerDto: "  + registerDto);
+
         // add check for username exists in database
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
@@ -82,9 +86,8 @@ public class AuthServiceImpl implements AuthService {
                     cookie.setValue(null);
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
-
-                    log.info("Cookie after logout: {}", cookie.getValue());
                     response.addHeader(HttpHeaders.COOKIE, cookie.getValue());
+                    log.info("Cookie after logout: {}", cookie.getValue());
                 }
         );
 

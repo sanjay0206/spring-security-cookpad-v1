@@ -1,5 +1,6 @@
 package com.cookpad.entities;
 
+import com.cookpad.entities.enums.RecipeType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,10 @@ public class Recipe {
     @Column(name = "recipe_name", nullable = false)
     private String recipeName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "recipe_type")
+    private RecipeType recipeType;
+
     @Column(name = "prep_time")
     private Integer prepTime;
 
@@ -41,10 +46,6 @@ public class Recipe {
     @Column(name = "method", columnDefinition = "TEXT", nullable = false)
     private String cookingMethod;
 
-    @Column(name = "category")
-    @Enumerated(EnumType.STRING)
-    private Category category;
-
     @OneToOne(mappedBy = "recipe", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private Nutrition nutrition;
 
@@ -54,9 +55,18 @@ public class Recipe {
     @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 
-    public Recipe(String recipeName, Category category, Integer prepTime, Integer cookingTime, Integer serves, String imageUrl, String ingredients, String cookingMethod, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public Recipe(String recipeName,
+                  RecipeType recipeType,
+                  Integer prepTime,
+                  Integer cookingTime,
+                  Integer serves,
+                  String imageUrl,
+                  String ingredients,
+                  String cookingMethod,
+                  LocalDateTime createdAt,
+                  LocalDateTime modifiedAt) {
         this.recipeName = recipeName;
-        this.category = category;
+        this.recipeType = recipeType;
         this.prepTime = prepTime;
         this.cookingTime = cookingTime;
         this.serves = serves;
