@@ -96,6 +96,9 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipeDto.getRecipeName() != null) {
             existingRecipe.setRecipeName(recipeDto.getRecipeName());
         }
+        if (recipeDto.getRecipeType() != null) {
+            existingRecipe.setRecipeType(recipeDto.getRecipeType());
+        }
         if (recipeDto.getPrepTime() != null) {
             existingRecipe.setPrepTime(recipeDto.getPrepTime());
         }
