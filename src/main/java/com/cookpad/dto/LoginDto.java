@@ -10,9 +10,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
-    @NotEmpty(message = "Username or email should not be null or empty")
     private String usernameOrEmail;
-
-    @NotEmpty(message = "Password should not be null or empty")
     private String password;
 }

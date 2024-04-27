@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -26,9 +27,11 @@ public class RecipeDto {
     private Integer serves;
 
     @NotEmpty(message = "Ingredients should not be null or empty")
+    @Size(min = 10, message = "Ingredients should have at least 10 characters")
     private String ingredients;
 
     @NotEmpty(message = "Cooking method should not be null or empty")
+    @Size(min = 10, message = "Cooking method should have at least 10 characters")
     private String cookingMethod;
 
     private String imageUrl;

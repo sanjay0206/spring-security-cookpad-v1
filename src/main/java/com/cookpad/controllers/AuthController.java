@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register (@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<UserDto> register (@RequestBody @Valid RegisterDto registerDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authService.register(registerDto));

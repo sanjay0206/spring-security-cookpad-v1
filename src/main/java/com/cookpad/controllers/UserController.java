@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,7 +29,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('SCOPE_user:create')")
     @PostMapping("/add-user")
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         return userService.createUser(userDto);
     }
 

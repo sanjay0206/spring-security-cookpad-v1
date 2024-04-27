@@ -89,6 +89,7 @@ public class JWTVerificationFilter extends OncePerRequestFilter {
             // Go to next filter in chain
             filterChain.doFilter(request, response);
         } catch (Exception e) {
+
             ErrorDetailsResponse errResponse = new ErrorDetailsResponse(
                     LocalDateTime.now(), e.getMessage(), URI + request.getRequestURI());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

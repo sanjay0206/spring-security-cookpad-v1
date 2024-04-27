@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,7 +48,7 @@ public class RecipeController {
 
     @PreAuthorize("hasAuthority('SCOPE_recipe:create')")
     @PostMapping("/add-recipe")
-    public RecipeDto createRecipe(@RequestBody RecipeDto recipeDto) {
+    public RecipeDto createRecipe(@RequestBody @Valid RecipeDto recipeDto) {
         return recipeService.createRecipe(recipeDto);
     }
 
