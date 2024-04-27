@@ -13,8 +13,8 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterDto {
+    private Long recipeId;
 
-    // username should not be null or empty
     @NotEmpty(message = "Username should not be null or empty")
     private String username;
 
