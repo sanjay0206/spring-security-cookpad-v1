@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long userId, UserDto userDto) {
-        log.info("useId: "  + userId);
+        log.info("userId: "  + userId);
         log.info("userDto: "  + userDto);
 
         User existingUser = userRepository.findById(userId)

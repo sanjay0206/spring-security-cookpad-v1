@@ -1,10 +1,8 @@
 package com.cookpad.services.impl;
 
-import com.cookpad.dto.RegisterDto;
 import com.cookpad.dto.UserDto;
 import com.cookpad.entities.User;
 import com.cookpad.exceptions.RecipeAPIException;
-import com.cookpad.mapper.UserMapper;
 import com.cookpad.repositories.UserRepository;
 import com.cookpad.security.AppConfig;
 import com.cookpad.security.UserRole;
@@ -46,30 +44,30 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto register (RegisterDto registerDto) {
-        log.info("registerDto: "  + registerDto);
+    public UserDto register (UserDto userDto) {
+        log.info("userDto: "  + userDto);
 
         // add check for username exists in database
-        if (userRepository.existsByUsername(registerDto.getUsername())) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
         }
 
         // add check for email exists in database
-        if (userRepository.existsByEmail(registerDto.getEmail())) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
         }
 
-        if (registerDto.getUserRole().equals(UserRole.ADMIN)) {
-            throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Can not register as admin!.");
+        if (userDto.getUserRole().equals(UserRole.ADMIN)) {
+            throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Can not register as ADMIN.");
         }
 
         // create user object
         User user = new User();
-        user.setUsername(registerDto.getUsername());
-        user.setEmail(registerDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setGender(registerDto.getGender());
-        user.setUserRole(registerDto.getUserRole());
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setGender(userDto.getGender());
+        user.setUserRole(userDto.getUserRole());
         user.setCreatedAt(LocalDateTime.now());
         User savedUser = userRepository.save(user);
 

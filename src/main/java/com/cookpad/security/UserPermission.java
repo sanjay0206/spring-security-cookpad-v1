@@ -4,7 +4,6 @@ package com.cookpad.security;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
 public enum UserPermission {
     POST_READ("SCOPE_recipe:read"),
@@ -19,4 +18,7 @@ public enum UserPermission {
 
     private final String permission;
 
+    public String getPermission() {
+        return permission;
+    }
 }
