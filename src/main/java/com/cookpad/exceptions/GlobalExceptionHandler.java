@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetailsResponse errorDetails = new ErrorDetailsResponse(LocalDateTime.now(), exception.getMessage(),
                 webRequest.getDescription(false));
 
-        log.info("ErrorDetailsResponse: " + errorDetails.getDetails());
+        log.info("ErrorDetailsResponse: " + errorDetails);
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
@@ -38,8 +40,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetailsResponse errorDetails = new ErrorDetailsResponse(LocalDateTime.now(), exception.getMessage(),
                 webRequest.getDescription(false));
 
-        log.info("ErrorDetailsResponse: " + errorDetails.getDetails());
+        log.info("ErrorDetailsResponse: " + errorDetails);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    // handle Unauthorized exceptions
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDetailsResponse> handleUnAuthorized(AccessDeniedException  exception,
+                                                                   WebRequest webRequest) {
+        ErrorDetailsResponse errorDetails = new ErrorDetailsResponse(LocalDateTime.now(), exception.getMessage(),
+                webRequest.getDescription(false));
+
+        log.info("ErrorDetailsResponse: " + errorDetails);
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
 
     // handle global exceptions
@@ -49,6 +62,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDetailsResponse errorDetails = new ErrorDetailsResponse(LocalDateTime.now(), exception.getMessage(),
                 webRequest.getDescription(false));
 
+        log.info("ErrorDetailsResponse: " + errorDetails);
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
