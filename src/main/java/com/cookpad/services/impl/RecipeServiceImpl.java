@@ -6,7 +6,7 @@ import com.cookpad.exceptions.ResourceNotFoundException;
 import com.cookpad.mapper.RecipeMapper;
 import com.cookpad.repositories.RecipeRepository;
 import com.cookpad.responses.RecipeResponse;
-import com.cookpad.responses.RecipeWithNutritionResponse;
+import com.cookpad.responses.RecipePreviewResponse;
 import com.cookpad.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -60,7 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<RecipeWithNutritionResponse> getRecipesWithNutrition() {
+    public List<RecipePreviewResponse> getAllRecipesPreview() {
         return recipeMapper.getRecipesWithNutrition();
     }
 

@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDto {
+public class RecipeDtoV2 {
 
     private Long recipeId;
 
@@ -37,6 +37,9 @@ public class RecipeDto {
     private String cookingMethod;
 
     private String imageUrl;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private NutritionDto nutrition;
 
 }
 
