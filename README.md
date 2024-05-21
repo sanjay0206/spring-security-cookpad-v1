@@ -8,7 +8,7 @@
 ![Diagram](src/main/resources/docs/spring-Dispatcher-Servlet-flow.png)
 
 ## Spring Security flow
-![Diagram](src/main/resources/docs/spring-security-flow.png)
+![Diagram](src/main/resources/docs/spring-security-flow-png.png)
  
 ## JWT token structure
 ![Diagram](src/main/resources/docs/token-struct.png)
