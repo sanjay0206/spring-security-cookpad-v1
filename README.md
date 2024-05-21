@@ -1,4 +1,4 @@
-# Spring Boot Recipe App with Soring Security - Cookpad
+# Spring Boot Recipe App with Spring Security 
 
 ## Cookpad DB Schema
 ![Diagram](src/main/resources/docs/cookpad_db_v1.png)
