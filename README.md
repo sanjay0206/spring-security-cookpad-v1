@@ -9,7 +9,7 @@
 
 ## Spring Security flow
 ![Diagram](src/main/resources/docs/spring-security-flow.png)
-
+ 
 ## JWT token structure
 ![Diagram](src/main/resources/docs/token-struct.png)
 
