@@ -1,6 +1,6 @@
 # Spring Boot Recipe App with Spring Security 
 
-## Cookpad DB Schema
+## Cookpad DB Schema - v1
 ![Diagram](src/main/resources/docs/cookpad_db_v1.png)
 
 ## Spring MVC flow
