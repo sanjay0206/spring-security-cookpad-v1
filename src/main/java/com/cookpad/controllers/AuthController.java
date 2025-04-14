@@ -38,5 +38,4 @@ public class AuthController {
         String response = authService.logout(httpServletRequest, httpServletResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 }
