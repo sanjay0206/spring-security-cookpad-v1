@@ -32,7 +32,7 @@ public class JWTTokenProvider {
     }
 
     public String generateToken(Authentication authResult) {
-        log.info("Authentication: " + authResult);
+        log.info("Authentication: {}", authResult);
 
         List<String> authorities = authResult.getAuthorities()
                 .stream()

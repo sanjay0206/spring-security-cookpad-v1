@@ -59,8 +59,6 @@ public class CookpadApplication {
 		return modelMapper;
 	}
 
-
-
 	@Bean
 	CommandLineRunner commandLineRunner (UserRepository userRepository,
 										 RecipeRepository recipeRepository,
@@ -85,7 +83,6 @@ public class CookpadApplication {
 			nutrition2.setRecipe(recipe2);
 			nutrition3.setRecipe(recipe3);
 			nutritionRepository.saveAll(Arrays.asList(nutrition1, nutrition2, nutrition3));
-
 		};
 	}
 }

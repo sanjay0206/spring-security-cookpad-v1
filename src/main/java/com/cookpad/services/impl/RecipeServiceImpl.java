@@ -66,8 +66,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto getRecipeById(Long recipeId) {
-        log.info("recipeId: "  + recipeId);
-
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -77,8 +75,6 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeDto createRecipe(RecipeDto recipeDto) {
         Recipe recipe = mapToEntity(recipeDto);
-        log.info("recipe: " + recipe);
-
         recipe.setCreatedAt(LocalDateTime.now());;
         Recipe savedRecipe = recipeRepository.save(recipe);
 
@@ -87,9 +83,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto updateRecipe(Long recipeId, RecipeDto recipeDto) {
-        log.info("recipeId: "  + recipeId);
-        log.info("recipeDto: "  + recipeDto);
-
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -124,8 +117,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void deleteRecipe(Long recipeId) {
-        log.info("recipeId: "  + recipeId);
-
         if (!recipeRepository.existsById(recipeId)) {
             throw new ResourceNotFoundException("Recipe", "recipeId", recipeId);
         }
@@ -141,5 +132,4 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe mapToEntity(RecipeDto recipeDto) {
         return modelMapper.map(recipeDto, Recipe.class);
     }
-
 }

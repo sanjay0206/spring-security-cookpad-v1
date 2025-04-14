@@ -37,7 +37,6 @@ public class JWTUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
                                          AppConfig appConfig,
                                          ObjectMapper mapper) {
         super(authenticationManager);
-        this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.appConfig = appConfig;
         this.mapper = mapper;
@@ -48,7 +47,7 @@ public class JWTUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
-        log.info("Request URL: " + request.getRequestURL());
+        log.info("Request URL: {}", request.getRequestURL());
         Authentication authentication = null;
         try {
             LoginDto loginDto = mapper.readValue(request.getInputStream(), LoginDto.class);

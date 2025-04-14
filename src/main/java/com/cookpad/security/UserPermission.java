@@ -1,10 +1,9 @@
 package com.cookpad.security;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@Getter
 public enum UserPermission {
     POST_READ("SCOPE_recipe:read"),
     POST_UPDATE("SCOPE_recipe:update"),
@@ -18,7 +17,7 @@ public enum UserPermission {
 
     private final String permission;
 
-    public String getPermission() {
-        return permission;
+    UserPermission(String permission) {
+        this.permission = permission;
     }
 }

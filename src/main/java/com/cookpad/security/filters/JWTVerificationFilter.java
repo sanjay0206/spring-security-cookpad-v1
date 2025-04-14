@@ -18,23 +18,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Component
 @Slf4j
 public class JWTVerificationFilter extends OncePerRequestFilter {
 
+    public static final String URI = "uri=";
     private final JWTTokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
     private final AppConfig appConfig;
     private final ObjectMapper mapper;
-    public static final String URI = "uri=";
 
     @Autowired
     public JWTVerificationFilter(CustomUserDetailsService userDetailsService,
@@ -52,44 +50,35 @@ public class JWTVerificationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException {
 
-        log.info("Request URL: " + request.getRequestURL());
+        log.info("Request URL: {}", request.getRequestURL());
         try {
 
             if (!request.getRequestURI().equals(appConfig.getRegisterEndpoint())) {
                 String authorizationHeader = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
                         .orElseThrow(() -> new RecipeAPIException(HttpStatus.FORBIDDEN, "Authorization header not found."));
-
-                Cookie accessTokenFromCookie = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
-                        .filter(cookie -> appConfig.getCookieName().equals(cookie.getName()))
-                        .findAny()
-                        .orElseThrow(() -> new RecipeAPIException(HttpStatus.FORBIDDEN, "Login cookie not found."));
-
                 String tokenPrefix = appConfig.getTokenPrefix();
                 String accessTokenFromAuthHeader = authorizationHeader.replace(tokenPrefix, "").trim();
 
-                if (accessTokenFromCookie.getValue().equals(accessTokenFromAuthHeader)) {
-                    if (tokenProvider.isValidToken(accessTokenFromAuthHeader)) {
+                if (tokenProvider.isValidToken(accessTokenFromAuthHeader)) {
 
-                        // Get username from token and load user details from user service
-                        String username = tokenProvider.getUsernameFromToken(accessTokenFromAuthHeader);
-                        log.info("username: {}", username);
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                        log.info("User Details: {}", userDetails);
+                    // Get username from token and load user details from user service
+                    String username = tokenProvider.getUsernameFromToken(accessTokenFromAuthHeader);
+                    log.info("username: {}", username);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    log.info("User Details: {}", userDetails);
 
-                        // Create and set authentication token using user details and authorities
-                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
+                    // Create and set authentication token using user details and authorities
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
 
             // Go to next filter in chain
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-
             ErrorDetailsResponse errResponse = new ErrorDetailsResponse(
                     LocalDateTime.now(), e.getMessage(), URI + request.getRequestURI());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

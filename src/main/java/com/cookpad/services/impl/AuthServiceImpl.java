@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDto register (UserDto userDto) {
-        log.info("userDto: "  + userDto);
+        log.info("userDto: {}", userDto);
 
         // add check for username exists in database
         if (userRepository.existsByUsername(userDto.getUsername())) {

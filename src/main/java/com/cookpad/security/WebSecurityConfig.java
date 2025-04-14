@@ -43,7 +43,6 @@ public class WebSecurityConfig {
         this.mapper = mapper;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

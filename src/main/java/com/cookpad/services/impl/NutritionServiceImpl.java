@@ -29,7 +29,6 @@ public class NutritionServiceImpl implements NutritionService {
         this.modelMapper = modelMapper;
     }
 
-
     @Override
     public NutritionDto getNutritionById(Long recipeId) {
         Recipe recipe = recipeRepository.findById(recipeId)
@@ -44,9 +43,6 @@ public class NutritionServiceImpl implements NutritionService {
 
     @Override
     public NutritionDto createNutrition(Long recipeId, NutritionDto nutritionDto) {;
-        log.info("recipeId: "  + recipeId);
-        log.info("nutritionDto: "  + nutritionDto);
-
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -64,8 +60,6 @@ public class NutritionServiceImpl implements NutritionService {
 
     @Override
     public NutritionDto updateNutrition(Long recipeId, NutritionDto nutritionDto) {
-        log.info("recipeId: "  + recipeId);
-        log.info("nutritionDto: "  + nutritionDto);
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -95,7 +89,6 @@ public class NutritionServiceImpl implements NutritionService {
 
     @Override
     public void deleteNutrition(Long recipeId) {
-        log.info("recipeId: "  + recipeId);
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 

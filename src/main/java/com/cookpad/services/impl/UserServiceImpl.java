@@ -40,8 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        log.info("userId: "  + userId);
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 
@@ -50,8 +48,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        log.info("userDto: "  + userDto);
-
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(mapToEntity(userDto));
 
@@ -60,9 +56,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long userId, UserDto userDto) {
-        log.info("userId: "  + userId);
-        log.info("userDto: "  + userDto);
-
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 
@@ -77,8 +70,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        log.info("userId: "+ userId );
-
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException("User", "userId", userId);
         }
