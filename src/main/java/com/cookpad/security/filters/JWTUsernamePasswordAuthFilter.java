@@ -26,7 +26,7 @@ import java.io.IOException;
 @Slf4j
 public class JWTUsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFilter {
 
-    protected AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final AppConfig appConfig;
     private final JWTTokenProvider tokenProvider;
     private final ObjectMapper mapper;
@@ -37,6 +37,7 @@ public class JWTUsernamePasswordAuthFilter extends UsernamePasswordAuthenticatio
                                          AppConfig appConfig,
                                          ObjectMapper mapper) {
         super(authenticationManager);
+        this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.appConfig = appConfig;
         this.mapper = mapper;

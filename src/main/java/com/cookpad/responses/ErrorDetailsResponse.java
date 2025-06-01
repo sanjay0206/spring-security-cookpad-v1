@@ -1,21 +1,22 @@
 package com.cookpad.responses;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
+@Builder
 public class ErrorDetailsResponse {
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private final LocalDateTime timestamp;
     private final String message;
     private final String details;
 
     public ErrorDetailsResponse(LocalDateTime timestamp, String message, String details) {
-        this.timestamp = LocalDateTime.parse(timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        this.timestamp = timestamp;
         this.message = message;
         this.details = details;
     }

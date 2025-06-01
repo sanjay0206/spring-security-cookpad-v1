@@ -2,7 +2,6 @@ package com.cookpad.security;
 
 
 import com.cookpad.entities.User;
-import com.cookpad.mapper.UserMapper;
 import com.cookpad.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import java.util.Set;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-//    private final UserMapper userMapper;
 
     @Autowired
     public CustomUserDetailsService(UserRepository userRepository) {

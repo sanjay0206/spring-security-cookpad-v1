@@ -1,14 +1,16 @@
 package com.cookpad.exceptions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class RecipeAPIException extends IllegalStateException {
+public class RecipeAPIException extends RuntimeException {
     private HttpStatus status;
-    private String message;
+
+    public RecipeAPIException(HttpStatus status, String message) {
+        super(message);
+        this.status = status;
+    }
 }

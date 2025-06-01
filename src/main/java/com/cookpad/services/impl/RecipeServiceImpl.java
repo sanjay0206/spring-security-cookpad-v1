@@ -5,8 +5,8 @@ import com.cookpad.entities.Recipe;
 import com.cookpad.exceptions.ResourceNotFoundException;
 import com.cookpad.mapper.RecipeMapper;
 import com.cookpad.repositories.RecipeRepository;
-import com.cookpad.responses.RecipeResponse;
 import com.cookpad.responses.RecipePreviewResponse;
+import com.cookpad.responses.RecipeResponse;
 import com.cookpad.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
+
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
     private final ModelMapper modelMapper;
@@ -45,12 +47,12 @@ public class RecipeServiceImpl implements RecipeService {
         Page<Recipe> recipes = recipeRepository.findAll(pageable);
 
         List<RecipeDto> listOfRecipes = recipes.getContent().stream()
-                .map(recipe -> mapToDTO(recipe))
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
 
         RecipeResponse recipeResponse = new RecipeResponse();
         recipeResponse.setContent(listOfRecipes);
-        recipeResponse.setPageNo(recipes.getNumber());
+        recipeResponse.setPageNo(recipes.getNumber() + 1);
         recipeResponse.setPageSize(recipes.getSize());
         recipeResponse.setTotalElements(recipes.getTotalElements());
         recipeResponse.setTotalPages(recipes.getTotalPages());
@@ -60,12 +62,34 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public RecipeResponse searchRecipes(String query, Long recipeId, String recipeName, String recipeType,
+                                        Integer prepTime, Integer cookingTime, Integer serves, Pageable pageable) {
+        Specification<Recipe> spec = RecipeSpecification.search(query, recipeId, recipeName, recipeType, prepTime, cookingTime, serves);
+        Page<Recipe> recipePage = recipeRepository.findAll(spec, pageable);
+
+        List<RecipeDto> recipeDtos = recipePage.getContent().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+
+        RecipeResponse response = new RecipeResponse();
+        response.setContent(recipeDtos);
+        response.setPageNo(recipePage.getNumber() + 1);
+        response.setPageSize(recipePage.getSize());
+        response.setTotalElements(recipePage.getTotalElements());
+        response.setTotalPages(recipePage.getTotalPages());
+        response.setLast(recipePage.isLast());
+
+        return response;
+    }
+
+    @Override
     public List<RecipePreviewResponse> getAllRecipesPreview() {
         return recipeMapper.getRecipesWithNutrition();
     }
 
     @Override
     public RecipeDto getRecipeById(Long recipeId) {
+
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -75,6 +99,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public RecipeDto createRecipe(RecipeDto recipeDto) {
         Recipe recipe = mapToEntity(recipeDto);
+
         recipe.setCreatedAt(LocalDateTime.now());;
         Recipe savedRecipe = recipeRepository.save(recipe);
 
@@ -83,6 +108,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public RecipeDto updateRecipe(Long recipeId, RecipeDto recipeDto) {
+
         Recipe existingRecipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
 
@@ -117,6 +143,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public void deleteRecipe(Long recipeId) {
+
         if (!recipeRepository.existsById(recipeId)) {
             throw new ResourceNotFoundException("Recipe", "recipeId", recipeId);
         }

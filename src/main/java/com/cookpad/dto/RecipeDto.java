@@ -2,7 +2,6 @@ package com.cookpad.dto;
 
 
 import com.cookpad.entities.enums.RecipeType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

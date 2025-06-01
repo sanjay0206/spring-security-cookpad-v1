@@ -10,5 +10,4 @@ public interface RecipeMapper {
 
     // Method to get recipes with their corresponding nutrition information
     List<RecipePreviewResponse> getRecipesWithNutrition();
-
 }

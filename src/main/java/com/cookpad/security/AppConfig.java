@@ -41,6 +41,9 @@ public class AppConfig {
     @Value("${application.register.endpoint}")
     private String registerEndpoint;
 
+    @Value("${swagger.endpoints}")
+    private String swaggerEndpoints;
+
     public byte[] getSecretKeyForSigning() {
         return secretKey.getBytes();
     }

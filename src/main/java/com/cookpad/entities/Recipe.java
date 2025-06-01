@@ -43,7 +43,7 @@ public class Recipe {
     @Column(name = "ingredients", columnDefinition = "TEXT", nullable = false)
     private String ingredients;
 
-    @Column(name = "method", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "cooking_method", columnDefinition = "TEXT", nullable = false)
     private String cookingMethod;
 
     @OneToOne(mappedBy = "recipe", cascade = {CascadeType.REMOVE, CascadeType.MERGE})

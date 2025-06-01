@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -25,7 +27,7 @@ import java.util.Collections;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
-public class WebSecurityConfig {
+public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JWTTokenProvider tokenProvider;
@@ -33,10 +35,10 @@ public class WebSecurityConfig {
     private final ObjectMapper mapper;
 
     @Autowired
-    public WebSecurityConfig(CustomUserDetailsService userDetailsService,
-                             JWTTokenProvider tokenProvider,
-                             AppConfig appConfig,
-                             ObjectMapper mapper) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService,
+                          JWTTokenProvider tokenProvider,
+                          AppConfig appConfig,
+                          ObjectMapper mapper) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
         this.appConfig = appConfig;
@@ -47,7 +49,6 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
-                // by default uses a Bean by the name of corsConfigurationSource
                 .cors()
                 .and()
                 .csrf().disable()
@@ -56,6 +57,12 @@ public class WebSecurityConfig {
                 .addFilter(getUsernamePasswordAuthFilter())
                 .addFilterAfter(getJWTVerificationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                     .antMatchers(
+                        "/v2/api-docs/**",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**",
+                        "/webjars/**").permitAll()
                     .antMatchers(appConfig.getWhitelistedEndpoints()).permitAll()
                     .antMatchers(appConfig.getBlacklistedEndpoints()).denyAll()
                     .anyRequest().authenticated()

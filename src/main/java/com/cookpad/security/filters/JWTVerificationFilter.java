@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -52,8 +54,12 @@ public class JWTVerificationFilter extends OncePerRequestFilter {
 
         log.info("Request URL: {}", request.getRequestURL());
         try {
+            String uri = request.getRequestURI();
+            List<String> swaggerEndpoints = Arrays.asList(appConfig.getSwaggerEndpoints().split(","));
 
-            if (!request.getRequestURI().equals(appConfig.getRegisterEndpoint())) {
+            // ✅ Skip JWT check for Swagger and register endpoints
+            if (!uri.equals(appConfig.getRegisterEndpoint()) && swaggerEndpoints.stream().noneMatch(uri::startsWith)) {
+
                 String authorizationHeader = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
                         .orElseThrow(() -> new RecipeAPIException(HttpStatus.FORBIDDEN, "Authorization header not found."));
                 String tokenPrefix = appConfig.getTokenPrefix();
